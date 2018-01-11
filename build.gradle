@@ -49,8 +49,7 @@ subprojects {
     dependencies {
         compile "org.embulk:embulk-core:0.8.+"
         provided "org.embulk:embulk-core:0.8.+"
-        compile "org.embulk.base.restclient:embulk-base-restclient:0.5.4"
-        compile "org.embulk.base.restclient:embulk-util-retryhelper-jetty92:0.5.4"
+        implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
         testCompile "org.apache.commons:commons-csv:1.4" // read CSV fixtures
         testCompile "junit:junit:4.+"

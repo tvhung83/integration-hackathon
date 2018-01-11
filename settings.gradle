@@ -1,2 +1,3 @@
-include 'embulk-auth-http'
 include 'embulk-input-generic'
+include 'embulk-input-generic-auth'
+include 'embulk-input-generic-core'
