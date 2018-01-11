@@ -30,16 +30,18 @@ public abstract class Authentication implements Step
     @Override
     public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
     {
+        StepExecutionResult result = new StepExecutionResult();
         try {
             Task task = config.loadConfig(Task.class);
-            task.setAuthHeader(buildCredential(config));
-            return SUCCESS;
+            task.setAuthHeader(buildAuthHeader(config));
+            result.setStatus(SUCCESS);
         }
         catch (Exception e) {
             logger.error("Failed to write authentication value", e);
-            return ERROR;
+            result.setStatus(ERROR);
         }
+        return result;
     }
 
-    protected abstract String buildCredential(ConfigSource config);
+    protected abstract String buildAuthHeader(ConfigSource config);
 }

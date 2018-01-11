@@ -1,5 +1,6 @@
 package org.embulk.generic.auth.token;
 
+import org.apache.bval.constraints.NotEmpty;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
 import org.embulk.generic.auth.Authentication;
@@ -12,12 +13,13 @@ public class TokenAuthentication extends Authentication
 {
     public interface TokenTask extends Task
     {
+        @NotEmpty
         @Config("access_token")
         String getAccessToken();
     }
 
     @Override
-    protected String buildCredential(ConfigSource config)
+    protected String buildAuthHeader(ConfigSource config)
     {
         TokenTask task = config.loadConfig(TokenTask.class);
         return "Bearer " + task.getAccessToken();
