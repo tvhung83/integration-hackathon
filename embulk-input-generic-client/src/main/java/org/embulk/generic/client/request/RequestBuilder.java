@@ -1,0 +1,24 @@
+package org.embulk.generic.client.request;
+
+import org.apache.bval.constraints.NotEmpty;
+import org.embulk.config.Config;
+import org.embulk.config.ConfigDefault;
+import org.embulk.config.Task;
+import org.embulk.generic.core.step.Step;
+
+/**
+ * Output is request, ready to be sent
+ */
+public interface RequestBuilder extends Step
+{
+    interface RequestTask extends Task
+    {
+        @NotEmpty
+        @Config("url")
+        String getUrl();
+
+        @Config("method")
+        @ConfigDefault("GET")
+        String getMethod();
+    }
+}

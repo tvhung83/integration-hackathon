@@ -12,14 +12,14 @@ import org.apache.bval.constraints.NotEmpty;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
 import org.embulk.config.ConfigSource;
-import org.embulk.generic.auth.Authentication;
+import org.embulk.generic.auth.Authenticator;
 import org.embulk.spi.DataException;
 
 import java.io.IOException;
 
-public class OAuth2Authentication extends Authentication
+public class OAuth2Authenticator extends Authenticator
 {
-    public interface OAuth2Task extends Authentication.Task
+    public interface OAuth2Task extends Authenticator.Task
     {
         @NotEmpty
         @Config("token_url")
@@ -49,14 +49,14 @@ public class OAuth2Authentication extends Authentication
     {
         OAuth2Task task = config.loadConfig(OAuth2Task.class);
         // Build URL and GET params
-        HttpUrl.Builder urlBuider = HttpUrl.parse(task.getTokenUrl()).newBuilder();
-        urlBuider.addQueryParameter("grant_type", "refresh_token");
-        urlBuider.addQueryParameter("client_id", task.getClientId());
-        urlBuider.addQueryParameter("client_secret", task.getClientSecret());
-        urlBuider.addQueryParameter("refresh_token", task.getRefreshToken());
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(task.getTokenUrl()).newBuilder();
+        urlBuilder.addQueryParameter("grant_type", "refresh_token");
+        urlBuilder.addQueryParameter("client_id", task.getClientId());
+        urlBuilder.addQueryParameter("client_secret", task.getClientSecret());
+        urlBuilder.addQueryParameter("refresh_token", task.getRefreshToken());
         // Build request
         Request request = new Request.Builder()
-                .url(urlBuider.build())
+                .url(urlBuilder.build())
                 .build();
 
         try {

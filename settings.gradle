@@ -1,4 +1,4 @@
 include 'embulk-input-generic'
 include 'embulk-input-generic-auth'
-include 'embulk-input-generic-http'
+include 'embulk-input-generic-client'
 include 'embulk-input-generic-core'

@@ -1,7 +1,11 @@
 package org.embulk.generic.auth;
 
+import com.google.common.collect.ImmutableMap;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
+import org.embulk.generic.auth.basic.BasicAuthenticator;
+import org.embulk.generic.auth.oauth2.OAuth2Authenticator;
+import org.embulk.generic.auth.token.TokenAuthenticator;
 import org.embulk.generic.core.model.ExecutionContext;
 import org.embulk.generic.core.model.StepExecutionResult;
 import org.embulk.generic.core.step.Step;
@@ -13,7 +17,7 @@ import java.util.Map;
 import static org.embulk.generic.core.model.StepExecutionResult.ERROR;
 import static org.embulk.generic.core.model.StepExecutionResult.SUCCESS;
 
-public abstract class Authentication implements Step
+public abstract class Authenticator implements Step
 {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -21,10 +25,6 @@ public abstract class Authentication implements Step
     {
         @Config("type")
         String getType();
-
-        String getAuthHeader();
-
-        void setAuthHeader(String authHeader);
     }
 
     @Override
@@ -32,8 +32,7 @@ public abstract class Authentication implements Step
     {
         StepExecutionResult result = new StepExecutionResult();
         try {
-            Task task = config.loadConfig(Task.class);
-            task.setAuthHeader(buildAuthHeader(config));
+            result.setOutput(ImmutableMap.of("Authorization", buildAuthHeader(config)));
             result.setStatus(SUCCESS);
         }
         catch (Exception e) {
@@ -44,4 +43,18 @@ public abstract class Authentication implements Step
     }
 
     protected abstract String buildAuthHeader(ConfigSource config);
+
+    public static Authenticator getInstance(final String type)
+    {
+        switch (type) {
+            case "basic":
+                return new BasicAuthenticator();
+            case "token":
+                return new TokenAuthenticator();
+            case "oauth2":
+                return new OAuth2Authenticator();
+            default:
+                throw new IllegalArgumentException("Unknown auth type: " + type);
+        }
+    }
 }

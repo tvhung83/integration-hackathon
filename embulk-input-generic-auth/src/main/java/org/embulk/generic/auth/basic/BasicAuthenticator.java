@@ -5,9 +5,9 @@ import com.google.common.io.BaseEncoding;
 import org.apache.bval.constraints.NotEmpty;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
-import org.embulk.generic.auth.Authentication;
+import org.embulk.generic.auth.Authenticator;
 
-public class BasicAuthentication extends Authentication
+public class BasicAuthenticator extends Authenticator
 {
     public interface BasicTask extends Task
     {
