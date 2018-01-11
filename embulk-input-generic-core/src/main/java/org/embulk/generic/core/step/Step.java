@@ -12,7 +12,8 @@ import java.util.Optional;
 /**
  * Created by tai.khuu on 1/11/18.
  */
-public interface Step {
+public interface Step
+{
     StepExecutionResult run(
             ExecutionContext executionContext,
             ConfigSource config,
@@ -37,7 +38,8 @@ public interface Step {
             try {
                 Method getter = currentValue.getClass().getMethod("get" + variableName.substring(0, 1).toUpperCase() + variableName.substring(1));
                 currentValue = getter.invoke(currentValue);
-            } catch (IllegalAccessException | NoSuchMethodException |InvocationTargetException e) {
+            }
+            catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 return null;
             }
         }
