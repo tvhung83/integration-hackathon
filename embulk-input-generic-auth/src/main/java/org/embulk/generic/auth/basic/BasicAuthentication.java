@@ -21,7 +21,7 @@ public class BasicAuthentication extends Authentication
     }
 
     @Override
-    protected String buildCredential(ConfigSource config)
+    protected String buildAuthHeader(ConfigSource config)
     {
         BasicTask task = config.loadConfig(BasicTask.class);
         return "Basic " + BaseEncoding.base64().encode((task.getUsername() + ":" + task.getPassword()).getBytes(Charsets.UTF_8));
