@@ -1,17 +1,34 @@
 package org.embulk.generic.client.request;
 
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
 import org.embulk.generic.core.model.ExecutionContext;
 import org.embulk.generic.core.model.StepExecutionResult;
 
-import java.util.Map;
+import static org.embulk.generic.core.model.StepExecutionResult.Status.SUCCESS;
 
-// TODO: output is Map<String, String>, not suitable with output of JsonRequestBuilder
 public class JsonRequestBuilder implements RequestBuilder
 {
-    @Override
-    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
+    public interface JsonBodyTask extends RequestTask
     {
-        return null;
+        @Config("body")
+        String getBody();
+    }
+
+    @Override
+    public StepExecutionResult<Request> run(ExecutionContext executionContext, ConfigSource config, Object input)
+    {
+        StepExecutionResult<Request> result = new StepExecutionResult<>();
+        JsonBodyTask task = config.loadConfig(JsonBodyTask.class);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), task.getBody());
+        result.setOutput(new Request.Builder()
+                .url(task.getUrl())
+                .post(body)
+                .build());
+        result.setStatus(SUCCESS);
+        return result;
     }
 }

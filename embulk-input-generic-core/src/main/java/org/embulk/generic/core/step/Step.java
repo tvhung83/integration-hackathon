@@ -12,15 +12,15 @@ import java.util.Optional;
 /**
  * Created by tai.khuu on 1/11/18.
  */
-public interface Step
+public interface Step<I, O>
 {
-    StepExecutionResult run(
+    StepExecutionResult<O> run(
             ExecutionContext executionContext,
             ConfigSource config,
-            Map<String, String> input
+            I input
     );
 
-    //Evalue value expressions
+    // Evaluate value expressions
     default String evalWithScope(String exp, ExecutionContext executionContext, Map<String, String> input)
     {
         if (!exp.contains("{") || !exp.contains("}")) {

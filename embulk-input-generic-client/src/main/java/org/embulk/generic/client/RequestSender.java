@@ -1,6 +1,5 @@
 package org.embulk.generic.client;
 
-import com.google.common.collect.ImmutableMap;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,10 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class RequestSender implements Step
+import static org.embulk.generic.core.model.StepExecutionResult.Status.ERROR;
+import static org.embulk.generic.core.model.StepExecutionResult.Status.SUCCESS;
+
+public class RequestSender implements Step<Request, Response>
 {
     private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -37,9 +38,9 @@ public class RequestSender implements Step
      * `input` is client, ready to be sent
      */
     @Override
-    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
+    public StepExecutionResult<Response> run(ExecutionContext executionContext, ConfigSource config, Request input)
     {
-        StepExecutionResult result = new StepExecutionResult();
+        StepExecutionResult<Response> result = new StepExecutionResult<>();
 
         SenderTask task = config.loadConfig(SenderTask.class);
         // TODO: cache client to reduce overhead
@@ -48,15 +49,13 @@ public class RequestSender implements Step
                 .readTimeout(task.getReadTimeout(), TimeUnit.SECONDS)
                 .build();
 
-        // TODO: get request from input
-        // TODO: output as Response
         try {
-            Response resp = client.newCall(new Request.Builder().url("dummy").build()).execute();
-            result.setOutput(ImmutableMap.of("response", resp.body().string()));
-            result.setStatus(StepExecutionResult.SUCCESS);
-        } catch (IOException e) {
+            result.setOutput(client.newCall(input).execute());
+            result.setStatus(SUCCESS);
+        }
+        catch (IOException e) {
             log.warn("Failed to send request: {}", e.getMessage(), e);
-            result.setStatus(StepExecutionResult.ERROR);
+            result.setStatus(ERROR);
         }
         return result;
     }
