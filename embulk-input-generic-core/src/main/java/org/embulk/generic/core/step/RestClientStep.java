@@ -1,10 +1,12 @@
 package org.embulk.generic.core.step;
 
+import okhttp3.OkHttpClient;
 import org.embulk.config.ConfigSource;
 import org.embulk.generic.core.model.ExecutionContext;
 import org.embulk.generic.core.model.StepConfig;
 import org.embulk.generic.core.model.StepExecutionResult;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,20 +15,26 @@ import java.util.Map;
 public class RestClientStep implements Step
 {
 
-//    @Override
-//    public StepExecutionResult run(ExecutionContext executionContext, StepConfig stepConfig, Map<String, String> input)
-//    {
-//        Map<String, String> headerConfiguration = stepConfig.getConfig("header", Map.class);
-//    }
-//
-//    private Map<String, String> buildHeader(ExecutionContext executionContext, Map<String, String> headerConfiguration, Map<String, String> input)
-//    {
-//        headerConfiguration.
-//    }
+    private OkHttpClient okHttpClient;
+
+    public RestClientStep(OkHttpClient okHttpClient)
+    {
+        this.okHttpClient = okHttpClient;
+    }
 
     @Override
     public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
     {
         return null;
     }
+
+    public Map<String, String> buildHeader(Map<String, String> headerConfiguration, ExecutionContext executionContext, Map<String, String> input)
+    {
+        Map<String, String> headerMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : headerConfiguration.entrySet()) {
+            headerMap.put(entry.getKey(), evalWithScope(entry.getValue(), executionContext, input));
+        }
+        return headerMap;
+    }
 }
+

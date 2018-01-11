@@ -18,7 +18,9 @@ public class StepExecutor
     public StepExecutionResult execute(StepConfig stepConfig,ExecutionContext executionContext, Map<String, String> input)
     {
         Step step = getStep(stepConfig.getStepName());
-        StepExecutionResult result = step.run(executionContext, stepConfig, input);
+        StepExecutionResult result = step.run(executionContext, stepConfig.getConfiguration(), input);
+        //if step didn't set nextStep then we do it here
+        result.setNextStep(stepConfig.getNextStepId());
         return result;
     }
 

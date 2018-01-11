@@ -10,10 +10,7 @@ import java.util.Map;
  */
 public class Flow
 {
-
     private Map<String, StepConfig> steps;
-
-    private StepExecutor stepExecutor;
 
     public Map<String, StepConfig> getSteps()
     {
@@ -37,16 +34,5 @@ public class Flow
         return null;
     }
 
-    public FlowExecutionResult execute(ExecutionContext executionContext)
-    {
-        Map<String, String> stepInput = new HashMap<>();
-        String nextStep = getFirstStep();
-        while (nextStep != null) {
-            StepConfig stepConfig = getStep(nextStep);
-            StepExecutionResult result = stepExecutor.execute(stepConfig, executionContext, stepInput);
-            nextStep = result.getNextStep();
-            stepInput = result.getOutput();
-        }
-        return new FlowExecutionResult();
-    }
+
 }

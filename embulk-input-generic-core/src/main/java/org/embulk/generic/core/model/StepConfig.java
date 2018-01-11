@@ -1,5 +1,8 @@
 package org.embulk.generic.core.model;
 
+import org.embulk.config.ConfigSource;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +15,11 @@ public class StepConfig
 
     private int order;
 
-    private Map<String, Object> configuration;
+    private ConfigSource configuration;
+
+    private Map<String, String> contextOutput;
+
+    private String nextStepId;
 
     public String getStepName()
     {
@@ -34,8 +41,33 @@ public class StepConfig
         this.order = order;
     }
 
-    public <T> T getConfig(String key, Class<T> klass)
+    public ConfigSource getConfiguration()
     {
-        return klass.cast(configuration.get(key));
+        return configuration;
+    }
+
+    public void setConfiguration(ConfigSource configuration)
+    {
+        this.configuration = configuration;
+    }
+
+    public Map<String, String> getContextOutput()
+    {
+        return contextOutput;
+    }
+
+    public void setContextOutput(Map<String, String> contextOutput)
+    {
+        this.contextOutput = contextOutput;
+    }
+
+    public String getNextStepId()
+    {
+        return nextStepId;
+    }
+
+    public void setNextStepId(String nextStepId)
+    {
+        this.nextStepId = nextStepId;
     }
 }
