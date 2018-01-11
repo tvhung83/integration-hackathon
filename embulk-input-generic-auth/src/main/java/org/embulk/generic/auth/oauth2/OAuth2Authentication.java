@@ -1,5 +1,6 @@
 package org.embulk.generic.auth.oauth2;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
@@ -12,6 +13,7 @@ import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
 import org.embulk.config.ConfigSource;
 import org.embulk.generic.auth.Authentication;
+import org.embulk.spi.DataException;
 
 import java.io.IOException;
 
@@ -59,10 +61,16 @@ public class OAuth2Authentication extends Authentication
 
         try {
             Response response = new OkHttpClient().newCall(request).execute();
-            if (response != null && response.body() != null) {
-                return "Bearer " + mapper.readTree(response.body().string()).get("access_token").asText();
+            if (response == null || response.body() == null) {
+                throw new IllegalArgumentException("FATAL - Failed to refresh token, response is null");
             }
-            throw new IllegalArgumentException("FATAL - Failed to refresh token, response is null");
+            String body = response.body().string();
+            JsonNode result = mapper.readTree(body);
+            // Check expected `access_token` node
+            if (!result.hasNonNull("access_token")) {
+                throw new DataException("Unexpected response: \n" + body);
+            }
+            return "Bearer " + result.get("access_token").asText();
         }
         catch (IOException e) {
             throw Throwables.propagate(e);
