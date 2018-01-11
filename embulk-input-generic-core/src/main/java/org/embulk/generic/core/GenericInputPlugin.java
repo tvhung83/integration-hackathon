@@ -1,4 +1,4 @@
-package org.embulk.input.generic;
+package org.embulk.generic.core;
 
 import java.util.List;
 
