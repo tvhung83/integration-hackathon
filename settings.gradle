@@ -1,0 +1,2 @@
+include 'embulk-auth-http'
+include 'embulk-input-generic'
