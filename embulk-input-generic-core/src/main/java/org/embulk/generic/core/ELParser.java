@@ -36,7 +36,7 @@ public class ELParser
         }
         return INSTANCE;
     }
-    public <T> T parseString(String inputString, ExecutionContext context, Map<String,String> inputMap, Class<T> klass){
+    public <T,R> T eval(String inputString, ExecutionContext context, R inputMap, Class<T> klass){
         Expression expression = expressionParser.parseExpression(inputString);
         EvaluationContext evaluationContext = new StandardEvaluationContext();
         evaluationContext.setVariable("context", context);
