@@ -30,8 +30,8 @@ subprojects {
     apply plugin: 'com.jfrog.bintray'
     apply plugin: 'com.github.jruby-gradle.base'
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     configurations {
         provided
@@ -49,6 +49,7 @@ subprojects {
     dependencies {
         compile "org.embulk:embulk-core:0.8.+"
         provided "org.embulk:embulk-core:0.8.+"
+        compile group: 'org.springframework', name: 'spring-expression', version: '5.0.2.RELEASE'
         implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
         testCompile "org.apache.commons:commons-csv:1.4" // read CSV fixtures

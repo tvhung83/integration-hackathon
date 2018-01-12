@@ -28,7 +28,16 @@ public class RestClientStep implements Step
         return null;
     }
 
-    public Map<String, String> buildHeader(Map<String, String> headerConfiguration, ExecutionContext executionContext, Map<String, String> input)
+    private Map<String, String> buildHeader(Map<String, String> headerConfiguration, ExecutionContext executionContext, Map<String, String> input)
+    {
+        Map<String, String> headerMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : headerConfiguration.entrySet()) {
+            headerMap.put(entry.getKey(), evalWithScope(entry.getValue(), executionContext, input));
+        }
+        return headerMap;
+    }
+
+    private Map<String, String> buildParams(Map<String, String> parameterMap, ExecutionContext executionContext, Map<String, String> input)
     {
         Map<String, String> headerMap = new HashMap<>();
         for (Map.Entry<String, String> entry : headerConfiguration.entrySet()) {

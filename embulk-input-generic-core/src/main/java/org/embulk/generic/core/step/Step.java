@@ -1,6 +1,7 @@
 package org.embulk.generic.core.step;
 
 import org.embulk.config.ConfigSource;
+import org.embulk.generic.core.ELParser;
 import org.embulk.generic.core.model.ExecutionContext;
 import org.embulk.generic.core.model.StepExecutionResult;
 
@@ -20,27 +21,8 @@ public interface Step {
     );
 
     //Evalue value expressions
-    default String evalWithScope(String exp, ExecutionContext executionContext, Map<String, String> input)
+    default <T> T evalWithScope(String exp, ExecutionContext executionContext, Map<String, String> input,Class<T> klass)
     {
-        if (!exp.contains("{") || !exp.contains("}")) {
-            return exp;
-        }
-        String[] exps = exp.split(".");
-        String inputVaiableName = exps[0];
-        Object currentValue = Optional.ofNullable(executionContext.get(inputVaiableName)).orElse(input.get(inputVaiableName));
-        if (currentValue == null) {
-            return null;
-        }
-        int i = 1;
-        while (i < exps.length) {
-            String variableName = exps[i];
-            try {
-                Method getter = currentValue.getClass().getMethod("get" + variableName.substring(0, 1).toUpperCase() + variableName.substring(1));
-                currentValue = getter.invoke(currentValue);
-            } catch (IllegalAccessException | NoSuchMethodException |InvocationTargetException e) {
-                return null;
-            }
-        }
-        return currentValue.toString();
+        ELParser.getInstance().parseString(exp, executionContext, input, klass);
     }
 }

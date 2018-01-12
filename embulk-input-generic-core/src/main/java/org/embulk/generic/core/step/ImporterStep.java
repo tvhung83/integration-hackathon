@@ -10,7 +10,7 @@ import java.util.Map;
  * Import step
  * Created by tai.khuu on 1/11/18.
  */
-public class ImporterStep extends Step
+public class ImporterStep implements Step
 {
 
     @Override
