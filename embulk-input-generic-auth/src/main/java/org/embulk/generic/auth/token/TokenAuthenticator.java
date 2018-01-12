@@ -3,13 +3,13 @@ package org.embulk.generic.auth.token;
 import org.apache.bval.constraints.NotEmpty;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
-import org.embulk.generic.auth.Authentication;
+import org.embulk.generic.auth.Authenticator;
 
 /**
- * This authentication make use of a permanent access token
+ * This authenticator uses a permanent access token
  * It uses request header "Authorization: Bearer access_token"
  */
-public class TokenAuthentication extends Authentication
+public class TokenAuthenticator extends Authenticator
 {
     public interface TokenTask extends Task
     {

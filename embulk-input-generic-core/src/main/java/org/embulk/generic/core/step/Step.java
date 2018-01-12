@@ -13,11 +13,12 @@ import java.util.Optional;
 /**
  * Created by tai.khuu on 1/11/18.
  */
-public interface Step {
-    StepExecutionResult run(
+public interface Step<I, O>
+{
+    StepExecutionResult<O> run(
             ExecutionContext executionContext,
             ConfigSource config,
-            Map<String, String> input
+            I input
     );
 
     //Evalue value expressions
