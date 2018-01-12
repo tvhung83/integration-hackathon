@@ -12,13 +12,13 @@ public class FlowExecutor
 {
 
     StepExecutor stepExecutor;
-    public FlowExecutionResult execute(Flow flow,ExecutionContext executionContext)
+    public FlowExecutionResult execute(Flow flow, ExecutionContext executionContext)
     {
         Map<String, String> stepInput = new HashMap<>();
         String nextStep = flow.getFirstStep();
         while (nextStep != null) {
             StepConfig stepConfig = flow.getStep(nextStep);
-            StepExecutionResult result = stepExecutor.execute(stepConfig, executionContext, stepInput);
+            StepExecutionResult<Map<String, String>> result = stepExecutor.execute(stepConfig, executionContext, stepInput);
             nextStep = result.getNextStep();
             Map<String, String> stepOutput = result.getOutput();
             stepInput = stepOutput;
@@ -26,7 +26,7 @@ public class FlowExecutor
             if (stepConfig.getContextOutput() == null) {
             continue;
             }
-            for (Map.Entry<String,String> outputContext : stepConfig.getContextOutput().entrySet()) {
+            for (Map.Entry<String, String> outputContext : stepConfig.getContextOutput().entrySet()) {
                 String value = stepOutput.get(outputContext.getValue());
                 if (value != null) {
                     executionContext.put(outputContext.getKey(), value);

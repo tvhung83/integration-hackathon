@@ -22,8 +22,9 @@ public class JsonValueExtractor implements Step
         Map<String, String> getJsonPahMap();
 
     }
+
     @Override
-    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
+    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Object input)
     {
         StepExecutionResult stepExecutionResult = new StepExecutionResult();
 //        stepExecutionResult.setOutput();

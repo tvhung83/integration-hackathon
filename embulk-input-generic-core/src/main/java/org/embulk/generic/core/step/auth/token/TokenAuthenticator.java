@@ -1,9 +1,9 @@
-package org.embulk.generic.auth.token;
+package org.embulk.generic.core.step.auth.token;
 
 import org.apache.bval.constraints.NotEmpty;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
-import org.embulk.generic.auth.Authenticator;
+import org.embulk.generic.core.step.auth.Authenticator;
 
 /**
  * This authenticator uses a permanent access token
@@ -11,7 +11,7 @@ import org.embulk.generic.auth.Authenticator;
  */
 public class TokenAuthenticator extends Authenticator
 {
-    public interface TokenTask extends Task
+    public interface TokenTask extends AuthTask
     {
         @NotEmpty
         @Config("access_token")

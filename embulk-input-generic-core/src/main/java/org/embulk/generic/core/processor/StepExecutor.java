@@ -15,7 +15,7 @@ public class StepExecutor
 
     private Map<String, Step> stepMap;
 
-    public StepExecutionResult execute(StepConfig stepConfig,ExecutionContext executionContext, Map<String, String> input)
+    public StepExecutionResult execute(StepConfig stepConfig, ExecutionContext executionContext, Map<String, String> input)
     {
         Step step = getStep(stepConfig.getStepName());
         StepExecutionResult result = step.run(executionContext, stepConfig.getConfiguration(), input);

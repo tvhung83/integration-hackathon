@@ -1,4 +1,4 @@
-package org.embulk.generic.client.request;
+package org.embulk.generic.core.step.client.builder;
 
 import com.google.common.base.Optional;
 import okhttp3.FormBody;

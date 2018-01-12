@@ -12,9 +12,8 @@ import java.util.Map;
  */
 public class ImporterStep implements Step
 {
-
     @Override
-    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String, String> input)
+    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Object input)
     {
         return null;
     }

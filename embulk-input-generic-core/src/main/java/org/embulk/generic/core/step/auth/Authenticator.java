@@ -1,10 +1,11 @@
-package org.embulk.generic.auth;
+package org.embulk.generic.core.step.auth;
 
 import org.embulk.config.Config;
 import org.embulk.config.ConfigSource;
-import org.embulk.generic.auth.basic.BasicAuthenticator;
-import org.embulk.generic.auth.oauth2.OAuth2Authenticator;
-import org.embulk.generic.auth.token.TokenAuthenticator;
+import org.embulk.config.Task;
+import org.embulk.generic.core.step.auth.basic.BasicAuthenticator;
+import org.embulk.generic.core.step.auth.oauth2.OAuth2Authenticator;
+import org.embulk.generic.core.step.auth.token.TokenAuthenticator;
 import org.embulk.generic.core.model.ExecutionContext;
 import org.embulk.generic.core.model.StepExecutionResult;
 import org.embulk.generic.core.step.Step;
@@ -15,13 +16,13 @@ import static org.embulk.generic.core.model.StepExecutionResult.Status.ERROR;
 import static org.embulk.generic.core.model.StepExecutionResult.Status.SUCCESS;
 
 /**
- * Authenticator doesn't need input
+ * Authenticator doesn't need input, it reads from config file
  */
 public abstract class Authenticator implements Step<Object, String>
 {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    public interface Task
+    public interface AuthTask extends Task
     {
         @Config("type")
         String getType();

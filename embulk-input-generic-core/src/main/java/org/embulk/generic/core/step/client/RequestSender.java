@@ -1,4 +1,4 @@
-package org.embulk.generic.client;
+package org.embulk.generic.core.step.client;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,7 +35,7 @@ public class RequestSender implements Step<Request, Response>
     }
 
     /*
-     * `input` is client, ready to be sent
+     * `input` is built request, ready to be sent
      */
     @Override
     public StepExecutionResult<Response> run(ExecutionContext executionContext, ConfigSource config, Request input)

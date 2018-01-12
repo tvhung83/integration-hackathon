@@ -1,4 +1,4 @@
-package org.embulk.generic.client.request;
+package org.embulk.generic.core.step.client.builder;
 
 import okhttp3.Request;
 import org.apache.bval.constraints.NotEmpty;
