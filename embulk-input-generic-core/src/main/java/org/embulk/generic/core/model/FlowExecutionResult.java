@@ -5,5 +5,15 @@ package org.embulk.generic.core.model;
  */
 public class FlowExecutionResult
 {
+    private Status status;
 
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    }
 }

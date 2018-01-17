@@ -1,18 +1,16 @@
 package org.embulk.generic.core.model;
 
-import static org.embulk.generic.core.model.StepExecutionResult.Status.SUCCESS;
+import java.util.Map;
 
-public class StepExecutionResult<O> {
-    public enum Status
-    {
-        SUCCESS, ERROR
-    }
+import static org.embulk.generic.core.model.Status.SUCCESS;
+
+public class StepExecutionResult {
 
     private Status status;
 
     private String nextStep;
 
-    private O output;
+    private Map<String,Object> output;
 
     public String getNextStep()
     {
@@ -24,12 +22,12 @@ public class StepExecutionResult<O> {
         this.nextStep = nextStep;
     }
 
-    public O getOutput()
+    public Map<String,Object> getOutput()
     {
         return output;
     }
 
-    public void setOutput(O output)
+    public void setOutput(Map<String,Object> output)
     {
         this.output = output;
     }

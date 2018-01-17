@@ -1,8 +1,9 @@
 package org.embulk.generic.core.model;
 
-import org.embulk.generic.core.processor.StepExecutor;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.embulk.spi.Schema;
+
 import java.util.Map;
 
 /**
@@ -11,6 +12,8 @@ import java.util.Map;
 public class Flow
 {
     private Map<String, StepConfig> steps;
+
+    private Schema schema;
 
     public Map<String, StepConfig> getSteps()
     {
@@ -26,13 +29,22 @@ public class Flow
         this.steps = steps;
     }
 
+    @JsonIgnore
     public String getFirstStep()
     {
-        for (StepConfig stepConfig : steps.values()) {
-            return stepConfig.toString();
+        for (String stepName : steps.keySet()) {
+            return stepName;
         }
         return null;
     }
 
+    public Schema getSchema()
+    {
+        return schema;
+    }
 
+    public void setSchema(Schema schema)
+    {
+        this.schema = schema;
+    }
 }

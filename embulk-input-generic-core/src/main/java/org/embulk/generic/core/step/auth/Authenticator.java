@@ -12,13 +12,16 @@ import org.embulk.generic.core.step.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.embulk.generic.core.model.StepExecutionResult.Status.ERROR;
-import static org.embulk.generic.core.model.StepExecutionResult.Status.SUCCESS;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.embulk.generic.core.model.Status.ERROR;
+import static org.embulk.generic.core.model.Status.SUCCESS;
 
 /**
  * Authenticator doesn't need input, it reads from config file
  */
-public abstract class Authenticator implements Step<Object, String>
+public abstract class Authenticator implements Step
 {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -29,11 +32,13 @@ public abstract class Authenticator implements Step<Object, String>
     }
 
     @Override
-    public StepExecutionResult<String> run(ExecutionContext executionContext, ConfigSource config, Object input)
+    public StepExecutionResult run(ExecutionContext executionContext, ConfigSource config, Map<String,Object> input)
     {
-        StepExecutionResult<String> result = new StepExecutionResult<>();
+        StepExecutionResult result = new StepExecutionResult();
         try {
-            result.setOutput(buildAuthHeader(config));
+            Map<String, Object> output = new HashMap<>();
+            output.put("access_header", buildAuthHeader(config));
+            result.setOutput(output);
             result.setStatus(SUCCESS);
         }
         catch (Exception e) {

@@ -1,4 +1,15 @@
-task gemspec {
+import com.github.jrubygradle.JRubyExec
+
+dependencies {
+    compile project(":embulk-input-generic-core")
+}
+task classpath(type: Copy, dependsOn: ["jar"]) {
+    doFirst { file("classpath").deleteDir() }
+    println configurations.runtime
+    from(configurations.runtime - configurations.provided + files(jar.archivePath))
+    into "classpath"
+}
+task gemspec(dependsOn: ["classpath"]) {
     ext.gemspecFile = file("${project.name}.gemspec")
     inputs.file "build.gradle"
     outputs.file gemspecFile
@@ -22,6 +33,18 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', ['>= 10.0']
 end
 /$)
+    }
+}
+task gem(type: JRubyExec, dependsOn: ["gemspec", "classpath"]) {
+    jrubyArgs "-rrubygems/gem_runner", "-eGem::GemRunner.new.run(ARGV)", "build"
+    script "${project.projectDir}/${project.name}.gemspec"
+    doLast { ant.move(file: "${project.name}-${project.version}.gem", todir: "pkg") }
+}
+
+task "package"(dependsOn: ["gemspec", "classpath"]) {
+    doLast {
+        println "> Build succeeded."
+        println "> You can run embulk with '-L ${file(".").absolutePath}' argument."
     }
 }
 clean { delete "${project.name}.gemspec" }

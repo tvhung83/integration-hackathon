@@ -1,8 +1,9 @@
 package org.embulk.generic.core.model;
 
-public interface ExecutionContext {
-    <T> T get(String key, Class<T> klass);
-    Object get(String key);
+import java.util.Map;
 
-    void put(String key, Object value);
+public interface ExecutionContext extends Map<String,Object>
+{
+
+    <T> T get(String key, Class<T> klass);
 }

@@ -10,11 +10,11 @@ import java.util.Map;
 /**
  * Created by tai.khuu on 1/11/18.
  */
-public interface Step<I, O>
+public interface Step
 {
-    StepExecutionResult<O> run(
+    StepExecutionResult run(
             ExecutionContext executionContext,
             ConfigSource config,
-            I input
+        Map<String,Object> input
     );
 }
